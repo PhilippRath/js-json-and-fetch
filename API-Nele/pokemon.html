@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neles API</title>
+    <style>
+      body {
+        max-width: 100em;
+        margin: auto;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content"></div>
+  </body>
+
+  <script>
+    fetch("https://pokeapi.co/api/v2/pokemon/ditto")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        let content = document.getElementById("content");
+        data.forEach((post) => {
+          let div = document.createElement("div");
+          div.innerHTML = `<div>${post.abilities}</div><p>${post.ability}</p>`;
+          content.appendChild(div);
+        });
+      })
+
+      .catch((error) => console.log("Error:", error));
+  </script>
+</html>
