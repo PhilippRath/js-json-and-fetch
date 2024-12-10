@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch Blog - Example</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      div {
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+      }
+      #content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Fetch Blog - Example</h1>
+      <div id="content"></div>
+    </main>
+    <script>
+      //todo: - Promises, callbacks, async await
+      //todo: - Fetch API
+      //todo: - JSON
+      //todo: - API Tests mit Insomnia, Postman oder Thunder Client
+
+      // 1. Daten werden von der API geholt, mit fetch
+      // 2. Daten ligen als JSON vor
+      // 3. JSON wird in ein JS-Objekt umgewandelt
+
+      let content = document.getElementById("content");
+      let users = [];
+
+      function fetchUsers() {
+        fetch("https://jsonplaceholder.typicode.com/users")
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            users = data;
+            console.log(users);
+            fetchPosts();
+          })
+          .catch((error) => console.log("Error:", error));
+      }
+
+      function getUserById(id) {
+        return users.find((user) => user.id === id);
+      }
+
+      function fetchPosts() {
+        fetch("https://jsonplaceholder.typicode.com/posts")
+          .then((response) => {
+            return response.json();
+          })
+          .then((posts) => {
+            posts.forEach((post) => {
+              renderPost(post);
+            });
+          })
+          .catch((error) => console.log("Error:", error));
+      }
+
+      function renderPost(post) {
+        let div = document.createElement("div");
+        let user = getUserById(post.userId);
+
+        div.innerHTML = `
+          <h2>
+            ${post.title}
+          </h2>
+          <h3>Author: ${user.name}</h3>
+          <p>${post.body}</p>
+        `;
+        content.appendChild(div);
+      }
+
+      function init() {
+        fetchUsers();
+      }
+
+      init();
+
+      /*
+      XML Beispiel:
+
+      <Daten>
+          <Pokemon>
+              <Name>Pikachu</Name>
+              <Typ>Elektro</Typ>
+              <Level>5</Level>
+          </Pokemon>
+      </Daten>
+*/
+    </script>
+  </body>
+</html>

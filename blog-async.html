@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch Blog async- Example</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      div {
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+      }
+      #content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Fetch Blog async - Example</h1>
+      <div id="content"></div>
+    </main>
+    <script>
+      //todo: - Promises, callbacks, async await
+      //todo: - Fetch API
+      //todo: - JSON
+      //todo: - API Tests mit Insomnia, Postman oder Thunder Client
+
+      // 1. Daten werden von der API geholt, mit fetch
+      // 2. Daten ligen als JSON vor
+      // 3. JSON wird in ein JS-Objekt umgewandelt
+
+      let content = document.getElementById("content");
+      let users = [];
+
+      async function fetchUsers() {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        const users = await response.json();
+
+        return users;
+      }
+
+      function getUserById(id) {
+        return users.find((user) => user.id === id);
+      }
+
+      async function fetchPosts() {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/posts"
+        );
+        const posts = await response.json();
+        return posts;
+      }
+
+      function renderPost(post) {
+        const div = document.createElement("div");
+        const user = getUserById(post.userId);
+
+        div.innerHTML = `
+          <h2>
+            ${post.title}
+          </h2>
+          <h3>Author: ${user.name}</h3>
+          <p>${post.body}</p>
+        `;
+        content.appendChild(div);
+      }
+
+      async function init() {
+        users = await fetchUsers();
+        posts = await fetchPosts();
+        posts.forEach((post) => {
+          renderPost(post);
+        });
+      }
+
+      init();
+
+      /*
+      XML Beispiel:
+
+      <Daten>
+          <Pokemon>
+              <Name>Pikachu</Name>
+              <Typ>Elektro</Typ>
+              <Level>5</Level>
+          </Pokemon>
+      </Daten>
+*/
+    </script>
+  </body>
+</html>
